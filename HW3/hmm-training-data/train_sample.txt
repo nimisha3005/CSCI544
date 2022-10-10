@@ -1,0 +1,4 @@
+Mary/N Jane/N can/M see/V Will/N
+Spot/N will/M see/V Mary/N
+Will/M Jane/N spot/V Mary/N
+Mary/N will/M pat/V Spot/N
