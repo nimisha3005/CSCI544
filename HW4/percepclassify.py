@@ -17,6 +17,9 @@ class PerceptronClassify:
 
 
     def read_model(self, filename):
+        """
+        Read the model file and initialize the weights and bias
+        """
         with open(filename, 'r') as f:
             json_data = json.load(f)
         self.data = json_data
@@ -29,6 +32,9 @@ class PerceptronClassify:
 
 
     def read_test(self,filename):
+        """
+        Read the test file and store the ids and reviews
+        """
         with open(filename, 'r') as f:
             lines = f.read().splitlines()
 
@@ -44,19 +50,26 @@ class PerceptronClassify:
     
 
     def remove_stopwords(self):
-        # print("before####", self.reviews[0], len(self.reviews[0]))
+        """
+        Remove the stopwords from the reviews
+        """
         for i in range(len(self.reviews)):
             self.reviews[i] = " ".join([w for w in self.reviews[i].split() if w not in self.stopwords])
-        # print("after####", self.reviews[0], len(self.reviews[0]))
 
     
     def remove_punctuation(self):
+        """
+        Remove the punctuation from the reviews using regular expressions
+        """
         # remove punctuation using regex
         for i in range(len(self.reviews)):
             self.reviews[i] = re.sub(r'[^\w\s]','',self.reviews[i])
 
 
     def word_count(self):
+        """
+        Count the number of words in the reviews
+        """
         for review in self.reviews:
             for word in review.split():
                 if word=='': continue
@@ -68,6 +81,9 @@ class PerceptronClassify:
 
 
     def classify(self):
+        """
+        Classify the reviews as positive or negative and true or fake
+        """
         for review in self.reviews:
             test_words = dict()
             for word in review.split():
@@ -88,7 +104,7 @@ class PerceptronClassify:
                 if word not in self.vanilla_weights2:
                     self.vanilla_weights2[word] = 0
 
-                #need to check this condition for unseen words
+                #only update the weights that are in the training data and ignore otherwise
                 if word in self.words:
                     activation1 += self.vanilla_weights1[word] * test_words[word]
                     activation2 += self.vanilla_weights2[word] * test_words[word]
@@ -108,6 +124,9 @@ class PerceptronClassify:
 
 
     def write_predictions(self, filename):
+        """
+        Write the predictions to the output file
+        """
         with open(filename, 'w') as f:
             for i in range(len(self.ids)):
                 f.write(self.ids[i] + " " + self.predict_true_fake[i] + " " + self.predict_pos_neg[i] + "\n")
